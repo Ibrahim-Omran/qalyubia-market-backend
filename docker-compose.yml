@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: qalyubia-market-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: qalyubia_market
+    ports:
+      - "5432:5432"
+    volumes:
+      - qalyubia_pg:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: qalyubia-market-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+volumes:
+  qalyubia_pg:
