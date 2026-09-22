@@ -48,7 +48,7 @@ export async function ads(req: AuthRequest, res: Response) {
 
 export async function approveAd(req: AuthRequest, res: Response) {
   const ad = await prisma.ad.update({
-    where: { id: req.params.id },
+    where: { id: req.params.id as string },
     data: { status: "ACTIVE", publishedAt: new Date() }
   });
   res.json({ success: true, data: ad });
@@ -56,7 +56,7 @@ export async function approveAd(req: AuthRequest, res: Response) {
 
 export async function rejectAd(req: AuthRequest, res: Response) {
   const ad = await prisma.ad.update({
-    where: { id: req.params.id },
+    where: { id: req.params.id as string },
     data: { status: "REJECTED" }
   });
   res.json({ success: true, data: ad });

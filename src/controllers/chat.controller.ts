@@ -33,7 +33,7 @@ export async function createConversation(req: AuthRequest, res: Response) {
 
 export async function listMessages(req: AuthRequest, res: Response) {
   const conversation = await prisma.conversation.findFirst({
-    where: { id: req.params.id, OR: [{ buyerId: req.user!.userId }, { sellerId: req.user!.userId }] }
+    where: { id: req.params.id as string, OR: [{ buyerId: req.user!.userId }, { sellerId: req.user!.userId }] }
   });
   if (!conversation) return res.status(404).json({ success: false, message: "Conversation not found" });
 

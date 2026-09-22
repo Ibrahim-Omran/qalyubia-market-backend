@@ -9,7 +9,8 @@ export async function redisHealthCheck() {
   if (!redis) return { configured: false, ok: false };
   try {
     const value = await redis.ping();
-    return { configured: true, ok: value === "PONG" || value === true };
+   // return { configured: true, ok: value === "PONG" || value === true };
+   return { configured: true, ok: value === "PONG" };
   } catch {
     return { configured: true, ok: false };
   }

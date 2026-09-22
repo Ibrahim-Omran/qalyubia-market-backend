@@ -54,7 +54,7 @@ export async function createPayment(req: AuthRequest, res: Response) {
 
 export async function getPayment(req: AuthRequest, res: Response) {
   const payment = await prisma.payment.findFirst({
-    where: { id: req.params.id, userId: req.user!.userId }
+    where: { id: req.params.id as string, userId: req.user!.userId }
   });
   if (!payment) return res.status(404).json({ success: false, message: "Payment not found" });
   res.json({ success: true, data: payment });

@@ -88,7 +88,7 @@ export async function listAds(req: AuthRequest, res: Response) {
 
 export async function getAd(req: AuthRequest, res: Response) {
   const ad = await prisma.ad.findUnique({
-    where: { id: req.params.id },
+    where: { id: req.params.id as string },
     include: { images: true, category: true, user: { select: { id: true, name: true, avatarUrl: true } } }
   });
   if (!ad || ad.status === "DELETED") return res.status(404).json({ success: false, message: "Ad not found" });
@@ -108,7 +108,7 @@ export async function myAds(req: AuthRequest, res: Response) {
 
 export async function updateAd(req: AuthRequest, res: Response) {
   const data = adSchema.partial().parse(req.body);
-  const ad = await prisma.ad.findFirst({ where: { id: req.params.id, userId: req.user!.userId } });
+  const ad = await prisma.ad.findFirst({ where: { id: req.params.id as string, userId: req.user!.userId } });
   if (!ad) return res.status(404).json({ success: false, message: "Ad not found" });
   if (ad.status === "ACTIVE") return res.status(400).json({ success: false, message: "Active ads cannot be edited in this starter API" });
 
@@ -117,14 +117,14 @@ export async function updateAd(req: AuthRequest, res: Response) {
 }
 
 export async function deleteAd(req: AuthRequest, res: Response) {
-  const ad = await prisma.ad.findFirst({ where: { id: req.params.id, userId: req.user!.userId } });
+  const ad = await prisma.ad.findFirst({ where: { id: req.params.id as string, userId: req.user!.userId } });
   if (!ad) return res.status(404).json({ success: false, message: "Ad not found" });
   const updated = await prisma.ad.update({ where: { id: ad.id }, data: { status: "DELETED" } });
   res.json({ success: true, data: updated });
 }
 
 export async function markSold(req: AuthRequest, res: Response) {
-  const ad = await prisma.ad.findFirst({ where: { id: req.params.id, userId: req.user!.userId } });
+  const ad = await prisma.ad.findFirst({ where: { id: req.params.id as string, userId: req.user!.userId } });
   if (!ad) return res.status(404).json({ success: false, message: "Ad not found" });
   const updated = await prisma.ad.update({ where: { id: ad.id }, data: { status: "SOLD" } });
   res.json({ success: true, data: updated });

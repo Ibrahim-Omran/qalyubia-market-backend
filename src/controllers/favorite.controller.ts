@@ -3,7 +3,7 @@ import { prisma } from "../lib/prisma";
 import { AuthRequest } from "../middlewares/auth";
 
 export async function addFavorite(req: AuthRequest, res: Response) {
-  const ad = await prisma.ad.findUnique({ where: { id: req.params.adId } });
+  const ad = await prisma.ad.findUnique({ where: { id: req.params.adId as string } });
   if (!ad || ad.status !== "ACTIVE") return res.status(404).json({ success: false, message: "Ad not found" });
 
   const favorite = await prisma.favorite.upsert({
@@ -17,11 +17,11 @@ export async function addFavorite(req: AuthRequest, res: Response) {
 
 export async function removeFavorite(req: AuthRequest, res: Response) {
   const existing = await prisma.favorite.findUnique({
-    where: { userId_adId: { userId: req.user!.userId, adId: req.params.adId } }
+    where: { userId_adId: { userId: req.user!.userId, adId: req.params.adId as string } }
   });
   if (existing) {
     await prisma.favorite.delete({ where: { id: existing.id } });
-    await prisma.ad.update({ where: { id: req.params.adId }, data: { favoritesCount: { decrement: 1 } } });
+    await prisma.ad.update({ where: { id: req.params.adId as string }, data: { favoritesCount: { decrement: 1 } } });
   }
   res.json({ success: true });
 }

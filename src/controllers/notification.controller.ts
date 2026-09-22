@@ -12,7 +12,7 @@ export async function listNotifications(req: AuthRequest, res: Response) {
 
 export async function markRead(req: AuthRequest, res: Response) {
   const item = await prisma.notification.updateMany({
-    where: { id: req.params.id, userId: req.user!.userId },
+    where: { id: req.params.id as string, userId: req.user!.userId },
     data: { isRead: true }
   });
   res.json({ success: true, data: { updated: item.count } });
